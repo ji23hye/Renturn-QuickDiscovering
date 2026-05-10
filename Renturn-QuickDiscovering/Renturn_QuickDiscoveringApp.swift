@@ -2,7 +2,7 @@
 //  Renturn_QuickDiscoveringApp.swift
 //  Renturn-QuickDiscovering
 //
-//  Created by 박지혜 on 4/5/2026.
+//  Created by Jihye Park on 4/5/2026.
 //
 
 import SwiftUI
