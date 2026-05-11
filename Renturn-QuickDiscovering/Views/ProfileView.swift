@@ -11,9 +11,8 @@ struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
 
     let agenda = [
-        ("May 12", "Pick up Ganni Black Dress", "vogue_vintage"),
-        ("May 16", "Birthday dinner outfit", "Rental in use"),
-        ("May 24", "Return Ganni Black Dress", "Before 6pm")
+        ("May 21", "Pick up Ganni Black Dress", "vogue_vintage"),
+        ("May 23", "Return Ganni Black Dress", "Before 6pm")
     ]
 
     var body: some View {
@@ -82,9 +81,9 @@ struct ProfileView: View {
                 .foregroundColor(.gray)
 
             HStack(spacing: 12) {
-                statCard(number: "3", label: "UPCOMING")
-                statCard(number: "1", label: "ACTIVE NOW")
-                statCard(number: "5", label: "SAVED")
+                statCard(number: "1", label: "UPCOMING")
+                statCard(number: "0", label: "ACTIVE NOW")
+                statCard(number: "2", label: "SAVED")
             }
         }
     }
@@ -146,41 +145,42 @@ struct ProfileView: View {
                 Spacer()
             }
 
-            let days = Array(1...31)
-            let columns = Array(repeating: GridItem(.flexible()), count: 7)
+            let weekdays = ["S", "M", "T", "W", "T", "F", "S"]
+            let calendarDays: [Int?] = [nil, nil, nil, nil, nil] + Array(1...31).map { Optional($0) }
+            let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 7)
 
-            LazyVGrid(columns: columns, spacing: 14) {
-
-                ForEach(["S", "M", "T", "W", "T", "F", "S"], id: \.self) { day in
-                    Text(day)
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(weekdays.indices, id: \.self) { index in
+                    Text(weekdays[index])
                         .font(.system(size: 12, weight: .bold))
                         .foregroundColor(.gray.opacity(0.6))
+                        .frame(width: 34, height: 20)
                 }
 
-                // May 1, 2026 starts on Friday
-                ForEach(0..<5, id: \.self) { _ in
-                    Color.clear
-                        .frame(width: 34, height: 34)
-                }
+                ForEach(calendarDays.indices, id: \.self) { index in
+                    if let day = calendarDays[index] {
+                        VStack(spacing: 3) {
+                            Text("\(day)")
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundColor(day == 21 ? .white : .gray)
+                                .frame(width: 34, height: 34)
+                                .background(day == 21 ? Color.blue : Color.clear)
+                                .clipShape(Circle())
 
-                ForEach(days, id: \.self) { day in
-                    VStack(spacing: 3) {
-                        Text("\(day)")
-                            .font(.system(size: 13, weight: .bold))
-                            .foregroundColor(day == 16 ? .white : .gray)
-                            .frame(width: 34, height: 34)
-                            .background(day == 16 ? Color.blue : Color.clear)
-                            .clipShape(Circle())
-
-                        if [12, 16, 24].contains(day) {
-                            Circle()
-                                .fill(day == 16 ? Color.green : Color.orange)
-                                .frame(width: 5, height: 5)
-                        } else {
-                            Circle()
-                                .fill(Color.clear)
-                                .frame(width: 5, height: 5)
+                            if [21, 23].contains(day) {
+                                Circle()
+                                    .fill(day == 21 ? Color.green : Color.orange)
+                                    .frame(width: 5, height: 5)
+                            } else {
+                                Circle()
+                                    .fill(Color.clear)
+                                    .frame(width: 5, height: 5)
+                            }
                         }
+                        .frame(width: 34, height: 42)
+                    } else {
+                        Color.clear
+                            .frame(width: 34, height: 42)
                     }
                 }
             }
