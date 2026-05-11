@@ -12,13 +12,20 @@ struct ExploreView: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var selectedFilter = "All"
+    @State private var selectedCategory: String
 
+    let categories = ["Dresses", "Tops", "Bottoms", "Bags", "Accessories", "Outerwear"]
     let filters = ["All", "Today", "Near me", "Under $20", "Formal"]
 
     let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
+
+    init(categoryName: String) {
+        self.categoryName = categoryName
+        _selectedCategory = State(initialValue: categoryName)
+    }
 
     var filteredProducts: [Product] {
         if selectedFilter == "Today" {
@@ -37,17 +44,7 @@ struct ExploreView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     searchBar
-
-                    HStack {
-                        Text(categoryName)
-                            .font(.system(size: 28, weight: .bold))
-
-                        Spacer()
-
-                        Image(systemName: "chevron.down")
-                            .font(.system(size: 14, weight: .bold))
-                    }
-
+                    categoryDropdown
                     filterChips
 
                     Text(selectedFilter == "Today" ? "Available today" : selectedFilter)
@@ -88,7 +85,7 @@ struct ExploreView: View {
                 Spacer()
 
                 Text("Renturn")
-                    .font(.system(size: 34, weight: .semibold))
+                    .font(.system(size: 30, weight: .bold))
                     .foregroundColor(.blue)
 
                 Spacer()
@@ -97,8 +94,8 @@ struct ExploreView: View {
                     .frame(width: 22, height: 22)
             }
             .padding(.horizontal, 24)
-            .padding(.top, 44)
-            .padding(.bottom, 20)
+            .padding(.top, 12)
+            .padding(.bottom, 12)
 
             Divider()
         }
@@ -124,6 +121,31 @@ struct ExploreView: View {
         )
     }
 
+    var categoryDropdown: some View {
+        Menu {
+            ForEach(categories, id: \.self) { category in
+                Button {
+                    selectedCategory = category
+                    selectedFilter = "All"
+                } label: {
+                    Text(category)
+                }
+            }
+        } label: {
+            HStack {
+                Text(selectedCategory)
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(.black)
+
+                Spacer()
+
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(.black)
+            }
+        }
+    }
+
     var filterChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
@@ -147,11 +169,21 @@ struct ExploreView: View {
     var bottomTab: some View {
         HStack {
             Spacer()
+
             tabItem(icon: "safari", title: "Explore", selected: true)
+
             Spacer()
-            tabItem(icon: "envelope", title: "Inbox", selected: false)
+
+            NavigationLink {
+                InboxView()
+            } label: {
+                tabItem(icon: "envelope", title: "Inbox", selected: false)
+            }
+
             Spacer()
+
             tabItem(icon: "person", title: "Profile", selected: false)
+
             Spacer()
         }
         .padding(.top, 10)

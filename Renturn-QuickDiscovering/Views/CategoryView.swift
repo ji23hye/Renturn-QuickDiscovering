@@ -33,7 +33,6 @@ struct CategoryView: View {
 
                         Text("What are you looking for?")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.primary)
 
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(categories, id: \.0) { category in
@@ -60,10 +59,10 @@ struct CategoryView: View {
     var header: some View {
         VStack(spacing: 0) {
             Text("Renturn")
-                .font(.system(size: 34, weight: .semibold))
+                .font(.system(size: 30, weight: .bold))
                 .foregroundColor(.blue)
-                .padding(.top, 44)
-                .padding(.bottom, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 12)
 
             Divider()
         }
@@ -92,11 +91,21 @@ struct CategoryView: View {
     var bottomTab: some View {
         HStack {
             Spacer()
+
             tabItem(icon: "safari", title: "Explore", selected: true)
+
             Spacer()
-            tabItem(icon: "envelope", title: "Inbox", selected: false)
+
+            NavigationLink {
+                InboxView()
+            } label: {
+                tabItem(icon: "envelope", title: "Inbox", selected: false)
+            }
+
             Spacer()
+
             tabItem(icon: "person", title: "Profile", selected: false)
+
             Spacer()
         }
         .padding(.top, 10)

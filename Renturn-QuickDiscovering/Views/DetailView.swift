@@ -136,8 +136,8 @@ struct DetailView: View {
             Spacer()
         }
         .padding(.horizontal, 24)
-        .padding(.top, 50)
-        .padding(.bottom, 16)
+        .padding(.top, 12)
+        .padding(.bottom, 12)
         .background(Color.white)
     }
 }
