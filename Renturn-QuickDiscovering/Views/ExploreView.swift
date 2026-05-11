@@ -13,6 +13,7 @@ struct ExploreView: View {
 
     @State private var selectedFilter = "All"
     @State private var selectedCategory: String
+    @State private var isCategoryDropdownOpen = false
 
     let categories = ["Dresses", "Tops", "Bottoms", "Bags", "Accessories", "Outerwear"]
     let filters = ["All", "Today", "Near me", "Under $20", "Formal"]
@@ -32,6 +33,8 @@ struct ExploreView: View {
             return [sampleDressProducts[0], sampleDressProducts[2], sampleDressProducts[3]]
         } else if selectedFilter == "Under $20" {
             return sampleDressProducts.filter { $0.pricePerDay < 20 }
+        } else if selectedFilter == "Formal" {
+            return [sampleDressProducts[0], sampleDressProducts[3]]
         } else {
             return sampleDressProducts
         }
@@ -44,20 +47,33 @@ struct ExploreView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     searchBar
-                    categoryDropdown
-                    filterChips
 
-                    Text(selectedFilter == "Today" ? "Available today" : selectedFilter)
-                        .font(.system(size: 20, weight: .bold))
+                    ZStack(alignment: .topLeading) {
+                        VStack(alignment: .leading, spacing: 24) {
+                            categoryDropdownHeader
 
-                    LazyVGrid(columns: columns, spacing: 24) {
-                        ForEach(filteredProducts) { product in
-                            NavigationLink {
-                                DetailView(product: product)
-                            } label: {
-                                ProductCard(product: product)
+                            filterChips
+
+                            Text(selectedFilter == "Today" ? "Available today" : selectedFilter)
+                                .font(.system(size: 20, weight: .bold))
+
+                            LazyVGrid(columns: columns, spacing: 24) {
+                                ForEach(filteredProducts) { product in
+                                    NavigationLink {
+                                        DetailView(product: product)
+                                    } label: {
+                                        ProductCard(product: product)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
-                            .buttonStyle(.plain)
+                        }
+
+                        if isCategoryDropdownOpen {
+                            categoryDropdownList
+                                .padding(.top, 52)
+                                .zIndex(10)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
                 }
@@ -121,29 +137,64 @@ struct ExploreView: View {
         )
     }
 
-    var categoryDropdown: some View {
-        Menu {
-            ForEach(categories, id: \.self) { category in
-                Button {
-                    selectedCategory = category
-                    selectedFilter = "All"
-                } label: {
-                    Text(category)
-                }
+    var categoryDropdownHeader: some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                isCategoryDropdownOpen.toggle()
             }
         } label: {
             HStack {
                 Text(selectedCategory)
-                    .font(.system(size: 28, weight: .bold))
+                    .font(.system(size: 32, weight: .bold))
                     .foregroundColor(.black)
 
                 Spacer()
 
                 Image(systemName: "chevron.down")
-                    .font(.system(size: 14, weight: .bold))
+                    .font(.system(size: 16, weight: .bold))
                     .foregroundColor(.black)
+                    .rotationEffect(.degrees(isCategoryDropdownOpen ? 180 : 0))
             }
         }
+        .buttonStyle(.plain)
+    }
+
+    var categoryDropdownList: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(categories, id: \.self) { category in
+                Button {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                        selectedCategory = category
+                        selectedFilter = "All"
+                        isCategoryDropdownOpen = false
+                    }
+                } label: {
+                    HStack {
+                        Text(category)
+                            .font(.system(size: 22, weight: .regular))
+                            .foregroundColor(.black)
+
+                        Spacer()
+
+                        if selectedCategory == category {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.blue)
+                        }
+                    }
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 18)
+                }
+
+                if category != categories.last {
+                    Divider()
+                        .padding(.leading, 18)
+                }
+            }
+        }
+        .background(Color.white)
+        .cornerRadius(22)
+        .shadow(color: .black.opacity(0.12), radius: 16, x: 0, y: 8)
     }
 
     var filterChips: some View {
@@ -182,7 +233,11 @@ struct ExploreView: View {
 
             Spacer()
 
-            tabItem(icon: "person", title: "Profile", selected: false)
+            NavigationLink {
+                ProfileView()
+            } label: {
+                tabItem(icon: "person", title: "Profile", selected: false)
+            }
 
             Spacer()
         }

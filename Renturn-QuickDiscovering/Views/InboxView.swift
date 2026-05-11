@@ -104,8 +104,11 @@ struct InboxView: View {
 
             Spacer()
 
-            tabItem(icon: "person", title: "Profile", selected: false)
-
+            NavigationLink {
+                ProfileView()
+            } label: {
+                tabItem(icon: "person", title: "Profile", selected: false)
+            }
             Spacer()
         }
         .padding(.top, 10)

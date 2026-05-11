@@ -104,7 +104,11 @@ struct CategoryView: View {
 
             Spacer()
 
-            tabItem(icon: "person", title: "Profile", selected: false)
+            NavigationLink {
+                ProfileView()
+            } label: {
+                tabItem(icon: "person", title: "Profile", selected: false)
+            }
 
             Spacer()
         }
