@@ -11,7 +11,7 @@ struct DetailView: View {
     let product: Product
 
     @Environment(\.dismiss) var dismiss
-    @State private var duration = 4
+    @State private var duration = 1
 
     var totalPrice: Int {
         product.pricePerDay * duration
@@ -100,6 +100,26 @@ struct DetailView: View {
                         .cornerRadius(8)
                     }
 
+                    NavigationLink {
+                        ChatView(message: MessagePreview(
+                            name: product.brand.replacingOccurrences(of: "@", with: ""),
+                            text: "Hi! I’m 160cm. Do you think this dress would fit me well?",
+                            imageName: "person1"
+                        ))
+                    } label: {
+                        HStack {
+                            Image(systemName: "message")
+                            Text("Contact owner")
+                                .font(.system(size: 18, weight: .bold))
+                        }
+                        .foregroundColor(.blue)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(Color.blue.opacity(0.08))
+                        .cornerRadius(14)
+                    }
+                    .padding(.top, 12)
+
                     Button {
                         // final rent action
                     } label: {
@@ -114,7 +134,6 @@ struct DetailView: View {
                         .background(Color.blue)
                         .cornerRadius(14)
                     }
-                    .padding(.top, 20)
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 30)
@@ -143,5 +162,7 @@ struct DetailView: View {
 }
 
 #Preview {
-    DetailView(product: sampleDressProducts[0])
+    NavigationStack {
+        DetailView(product: sampleDressProducts[0])
+    }
 }

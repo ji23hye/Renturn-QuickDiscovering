@@ -11,15 +11,15 @@ struct InboxView: View {
     @Environment(\.dismiss) var dismiss
 
     let activities = [
-        ActivityItem(name: "Vanessa_Lee", text: "requested to rent your Ganni Seersucker Midi Dress.", imageName: "person1"),
-        ActivityItem(name: "bella.bloom", text: "requested to rent your Ganni Seersucker Midi Dress.", imageName: "person2"),
-        ActivityItem(name: "daisy.noor", text: "requested to rent your Ganni Seersucker Midi Dress.", imageName: "person3")
+        ActivityItem(name: "vogue_vintage", text: "replied to your fit question about the Ganni Black Stretch Cotton Dress.", imageName: "person1"),
+        ActivityItem(name: "ivy.diary", text: "confirmed pickup details for the Prada Shoulder Bag.", imageName: "person2"),
+        ActivityItem(name: "lilac.ellaes", text: "sent extra measurements for the Linen Blazer.", imageName: "person3")
     ]
 
     let messages = [
-        MessagePreview(name: "Vanessa_Lee", text: "Hey! Is the Ganni Dress still available for next weekend?", imageName: "person1"),
-        MessagePreview(name: "ivy.diary", text: "Hey! Is the Ganni Dress still available for next weekend?", imageName: "person2"),
-        MessagePreview(name: "lilac.ellaes", text: "Hey! Is the Ganni Dress still available for next weekend?", imageName: "person3")
+        MessagePreview(name: "vogue_vintage", text: "Hi! Yes, I think it would fit you well. I’m 165cm and it sits just above my knees.", imageName: "person1"),
+        MessagePreview(name: "ivy.diary", text: "I can do pickup after 5pm if that works for you.", imageName: "person2"),
+        MessagePreview(name: "lilac.ellaes", text: "The blazer shoulder width is around 40cm.", imageName: "person3")
     ]
 
     var body: some View {

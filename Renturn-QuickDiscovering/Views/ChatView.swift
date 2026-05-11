@@ -18,10 +18,9 @@ struct ChatView: View {
 
             ScrollView {
                 VStack(spacing: 18) {
-                    chatBubble("Hi! Is this dress available for next week?", isMe: false)
-                    chatBubble("Hey! Yes, it’s available. What dates do you need it for?", isMe: true)
-                    chatBubble("I’m looking to rent it from Tuesday to Thursday.", isMe: false)
-                    chatBubble("That works! I can reserve it for you 👍", isMe: true)
+                    chatBubble(message.text, isMe: true)
+                    chatBubble("Hi! Yes, I think it would fit you well. I’m 165cm and it sits just above my knees.", isMe: false)
+                    chatBubble("That sounds perfect, thank you!", isMe: true)
                 }
                 .padding(.horizontal, 18)
                 .padding(.top, 28)
@@ -107,11 +106,21 @@ struct ChatView: View {
     var bottomTab: some View {
         HStack {
             Spacer()
-            tabItem(icon: "safari", title: "Explore", selected: false)
+
+            Button {
+                dismiss()
+            } label: {
+                tabItem(icon: "safari", title: "Explore", selected: false)
+            }
+
             Spacer()
+
             tabItem(icon: "envelope", title: "Inbox", selected: true)
+
             Spacer()
+
             tabItem(icon: "person", title: "Profile", selected: false)
+
             Spacer()
         }
         .padding(.top, 10)
@@ -135,8 +144,8 @@ struct ChatView: View {
 #Preview {
     NavigationStack {
         ChatView(message: MessagePreview(
-            name: "Vanessa_Lee",
-            text: "Hey! Is the Ganni Dress still available for next weekend?",
+            name: "vogue_vintage",
+            text: "Hi! I’m 160cm. Do you think this dress would fit me well?",
             imageName: "person1"
         ))
     }
